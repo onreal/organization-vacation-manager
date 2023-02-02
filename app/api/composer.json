@@ -1,0 +1,45 @@
+{
+    "require": {
+        "php": "7.4.10",
+        "vlucas/phpdotenv": "^5.5",
+        "catfan/medoo": "^2.1",
+        "slim/slim": "^4.11",
+        "php-di/php-di": "^6.4",
+        "php-di/slim-bridge": "^3.3",
+        "slim/psr7": "^1.6",
+        "phpmailer/phpmailer": "^6.7",
+        "zircote/swagger-php": "^4.6",
+        "doctrine/orm": "^2.14",
+        "symfony/cache": "^5.4",
+        "doctrine/annotations": "^2.0",
+        "gedmo/doctrine-extensions": "^3.11",
+        "doctrine/event-manager": "^1.2"
+    },
+    "require-dev": {
+        "phpmd/phpmd": "@stable",
+        "phpunit/phpunit": "^9.0",
+        "squizlabs/php_codesniffer": "3.5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Up\\Api\\": "src/Api",
+            "Up\\Core\\": "src/Core",
+            "Up\\Infrastructure\\": "src/Infrastructure",
+            "Up\\Persistence\\": "src/Persistence",
+            "Up\\Service\\": "src/Service",
+            "Up\\Application\\": "src/Application"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AppTest\\Acme\\": "test/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.10"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
