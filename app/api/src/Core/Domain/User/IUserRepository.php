@@ -17,7 +17,14 @@ interface IUserRepository
      * @param mixed $value
      * @return User|null
      */
-    public function findBy(string $type, $value): ?User;
+    public function findByOne(string $type, $value): ?User;
+
+    /**
+     * @param string $type
+     * @param $value
+     * @return array
+     */
+    public function findByAll(string $type, $value): array;
 
     /**
      * @return User[]

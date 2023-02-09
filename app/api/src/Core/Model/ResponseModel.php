@@ -33,7 +33,7 @@ class ResponseModel
      */
     public function getMessage(): string
     {
-        return $this->message;
+        return $this->isError() ? 'ERROR' : 'OK';
     }
 
     /**

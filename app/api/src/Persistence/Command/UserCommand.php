@@ -47,7 +47,7 @@ final class UserCommand implements IUserRepository
         return $user->getUserId();
     }
 
-    public function findBy(string $type, $value): ?User
+    public function findByOne(string $type, $value): ?User
     {
         if (ctype_digit($value)) {
             $value = (int) $value;
@@ -57,6 +57,21 @@ final class UserCommand implements IUserRepository
 
         if (!$user) {
             return null;
+        }
+
+        return $user;
+    }
+
+    public function findByAll(string $type, $value): array
+    {
+        if (ctype_digit($value)) {
+            $value = (int) $value;
+        }
+
+        $user = $this->repository->findBy([$type => $value]);
+
+        if (!$user) {
+            return [];
         }
 
         return $user;

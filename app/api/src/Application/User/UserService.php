@@ -47,7 +47,7 @@ final class UserService implements IUserService
                 return new ResponseModel($code, $errors[$code]);
             }
 
-            $isExists = $this->userRepository->findBy('email', $user->email);
+            $isExists = $this->userRepository->findByOne('email', $user->email);
             if ($isExists) {
                 return new ResponseModel(400, 'user already exists');
             }
@@ -69,7 +69,7 @@ final class UserService implements IUserService
             $salt = password_hash(
                 $user->password,
                 PASSWORD_BCRYPT,
-                array('cost' => strlen($user->password) + 2)
+                array('cost' => strlen($user->password))
             );
 
             $newUser = new User();
@@ -80,7 +80,7 @@ final class UserService implements IUserService
             $newUser->setRole($user->role);
             $userId = $this->userRepository->add($newUser);
 
-            return new ResponseModel(201, 'OK', $this->userRepository->findBy('userId', $userId));
+            return new ResponseModel(201, 'OK', $this->userRepository->findByOne('userId', $userId));
         } catch (Throwable $e) {
             return new ResponseModel(500, $e->getMessage());
         }
@@ -93,7 +93,7 @@ final class UserService implements IUserService
     public function find(int $userId): ResponseModel
     {
         try {
-            $user = $this->userRepository->findBy('userId', $userId);
+            $user = $this->userRepository->findByOne('userId', $userId);
             if (!$user) {
                 return new ResponseModel(404, 'user could not found');
             }
@@ -124,7 +124,7 @@ final class UserService implements IUserService
     public function update(int $userId, string $payload): ResponseModel
     {
         try {
-            $existingUser = $this->userRepository->findBy('userId', $userId);
+            $existingUser = $this->userRepository->findByOne('userId', $userId);
             if (!$existingUser) {
                 return new ResponseModel(404, 'user could not found');
             }
@@ -144,12 +144,28 @@ final class UserService implements IUserService
             $existingUser->setFirstName($theUser->firstName);
             $existingUser->setLastName($theUser->lastName);
             $existingUser->setEmail($theUser->email);
+
+            if (!isset($theUser->password) && $theUser->password) {
+                if (!$this->userValidation->verifyPassword($theUser->password, $existingUser->getSalt())) {
+                    if (!$this->userValidation->isPasswordRequirements($theUser->password)) {
+                        return new ResponseModel(400, 'Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.');
+                    }
+
+                    $salt = password_hash(
+                        $theUser->password,
+                        PASSWORD_BCRYPT,
+                        array('cost' => strlen($theUser->password))
+                    );
+                    $existingUser->setSalt($salt);
+                }
+            }
+
             $this->userRepository->update($existingUser);
         } catch (Throwable $e) {
             return new ResponseModel(500, $e->getMessage());
         }
 
-        return new ResponseModel(200, 'OK', $this->userRepository->findBy('userId', $userId));
+        return new ResponseModel(200, 'OK', $this->userRepository->findByOne('userId', $userId));
     }
 
     /**
@@ -159,7 +175,7 @@ final class UserService implements IUserService
     public function delete(int $userId): ResponseModel
     {
         try {
-            $existingUser = $this->userRepository->findBy('userId', $userId);
+            $existingUser = $this->userRepository->findByOne('userId', $userId);
             if (!$existingUser) {
                 return new ResponseModel(404, 'user could not found');
             }
@@ -184,7 +200,7 @@ final class UserService implements IUserService
                 return new ResponseModel(404, 'could not validate incoming credentials object');
             }
 
-            $user = $this->userRepository->findBy('email', $login->email);
+            $user = $this->userRepository->findByOne('email', $login->email);
             if (!$user) {
                 return new ResponseModel(404, 'wrong password or email, please try again');
             }

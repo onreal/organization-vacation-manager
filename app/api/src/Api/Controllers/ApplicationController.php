@@ -34,6 +34,19 @@ final class ApplicationController
         $response->getBody()->write($serviceResponse->getResponse());
         return $response->withStatus($serviceResponse->getCode(), $serviceResponse->getMessage());
     }
+    public function getByUserId(Response $response, int $userId): Response
+    {
+        $serviceResponse = $this->applicationService->findByUserId($userId);
+        $response->getBody()->write($serviceResponse->getResponse());
+        return $response->withStatus($serviceResponse->getCode(), $serviceResponse->getMessage());
+    }
+
+    public function getAll(Request $request, Response $response): Response
+    {
+        $serviceResponse = $this->applicationService->fetchAll();
+        $response->getBody()->write($serviceResponse->getResponse());
+        return $response->withStatus($serviceResponse->getCode(), $serviceResponse->getMessage());
+    }
 
     public function put(Request $request, Response $response, int $applicationId): Response
     {

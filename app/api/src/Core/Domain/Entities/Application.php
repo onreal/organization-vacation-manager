@@ -260,11 +260,12 @@ class Application implements JsonSerializable
             'applicationId' => $this->getApplicationId(),
             'userId' => $this->getUserId(),
             'status' => $this->getStatus(),
-            'from' => $this->getFromDate()->format("d-m-Y H:i"),
-            'to' => $this->getToDate()->format("d-m-Y H:i"),
+            'fromDate' => $this->getFromDate()->format("d/m/y"),
+            'toDate' => $this->getToDate()->format("d/m/y"),
             'reason' => $this->getReason(),
-            'createdDatetime' => $this->getCreatedDatetime()->format("d-m-Y H:i"),
-            'modifiedDatetime' => $this->getModifiedDatetime()->format("d-m-Y H:i")
+            'days' => $this->getFromDate()->diff($this->getToDate())->format("%a"),
+            'createdDatetime' => $this->getCreatedDatetime()->format("d/m/y H:i"),
+            'modifiedDatetime' => $this->getModifiedDatetime()->format("d/m/y H:i")
         ];
     }
 }

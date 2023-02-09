@@ -25,13 +25,15 @@ class EmailService implements IMailService
      * @param string $email
      * @param string $subject
      * @param string $body
-     * @throws Exception PHPMailer\Exception
+     * @throws Exception
      */
     public function send(string $email, string $subject, string $body)
     {
         $this->mailer->addAddress($email);
         $this->mailer->Subject = $subject;
-        $this->mailer->Body = $body;
-        $this->mailer->send();
+        $this->mailer->MsgHTML($body);
+        if (!$this->mailer->send()) {
+            throw new Exception('Email could not send => ' . $this->mailer->ErrorInfo);
+        }
     }
 }

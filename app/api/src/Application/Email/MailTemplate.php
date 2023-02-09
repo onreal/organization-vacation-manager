@@ -11,10 +11,12 @@ class MailTemplate
         string $toDate,
         string $reason
     ):string {
-        $approveUrl = $_ENV['APP_UI_URL'] . $_ENV['APP_UI_ACCEPT_URL'] . $applicationId;
-        $rejectUrl = $_ENV['APP_UI_URL'] . $_ENV['APP_UI_REJECT_URL'] . $applicationId;
+        $approve = sprintf($_ENV['APP_UI_ACCEPT_URL'], $applicationId);
+        $approveUrl = $_ENV['APP_UI_URL'] . $approve;
+        $reject = sprintf($_ENV['APP_UI_REJECT_URL'], $applicationId);
+        $rejectUrl = $_ENV['APP_UI_URL'] . $reject;
 
-        return printf(
+        return sprintf(
             'Dear supervisor, employee %s requested for some time off,
         starting on %s and ending on %s, stating the reason: <div style"display:block; width:100%%;"> %s </div>
         Click on one of the below links to approve or reject the application: 
@@ -32,10 +34,13 @@ class MailTemplate
         string $status,
         string $createdDatetime
     ):string {
-        return printf(
-            'Dear employee, your supervisor has %s your application submitted on %s.',
-            $status,
-            $createdDatetime
-        );
+//        $body = "Dear employee, your supervisor has %s your application submitted on %s.";
+//        return sprintf(
+//            $body,
+//            $status,
+//            $createdDatetime
+//        );
+        $body = "Dear employee, your supervisor has $status your application submitted on $createdDatetime.";
+        return $body;
     }
 }
