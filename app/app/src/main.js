@@ -1,6 +1,12 @@
 import { createApp } from 'vue'
+import router from './routes'
 import App from './App.vue'
+import VCalendar from 'v-calendar'
 
 import './assets/main.css'
+const app = createApp(App)
 
-createApp(App).mount('#app')
+app.use(router)
+app.use(VCalendar, {})
+
+app.mount('#app')

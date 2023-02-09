@@ -8,7 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.45"
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6",
+    "v-calendar": "^3.0.0-alpha.8"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",

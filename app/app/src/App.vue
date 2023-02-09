@@ -1,18 +1,48 @@
-<script setup>
-import Login from "@/components/Login.vue";
-</script>
-
 <template>
-  <header>
-    <div class="wrapper">
-      <Login></Login>
+  <div v-if="isLoggedIn">
+    <p>Hello {{getUser.firstName}},</p>
+    <button @click="logout" v-if="isLoggedIn">Log out</button>
+  </div>
+  <div>
+    <router-view></router-view>
+  </div>
+  <div class="app-errors">
+    <div class="error" v-for="(error, index) in this.getErrors" :key="index">
+      <strong>Error:</strong> {{error}}
     </div>
-  </header>
-
-  <main>
-  </main>
+  </div>
 </template>
-
+<script>
+import errorMixin from "@/components/Mixins/errorMixin";
+import store from "@/store";
+import {provide} from "vue";
+export default {
+  mixins: [errorMixin],
+  setup() {
+    provide( 'store', store)
+  },
+  methods: {
+    logout() {
+      const user = store.methods.getUser()
+      if (!user) {
+        return;
+      }
+      document.cookie = 'vacation_user_email=; Max-Age=0; path=/; domain=' + location.hostname;
+      localStorage.removeItem('user')
+      store.state.user = null
+      this.$router.push({ path: '/' });
+    }
+  },
+  computed: {
+    isLoggedIn () {
+      return store.methods.isLoggedIn()
+    },
+    getUser () {
+      return store.methods.getUser()
+    }
+  }
+}
+</script>
 <style scoped>
 header {
   line-height: 1.5;
