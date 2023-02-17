@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Application\Email;
+namespace Up\Application\Templates;
 
 class MailTemplate
 {

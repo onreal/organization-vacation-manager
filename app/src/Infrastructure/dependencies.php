@@ -1,9 +1,9 @@
 <?php
 
-use Up\Application\Application\ApplicationService;
-use Up\Application\Application\ApplicationValidator;
-use Up\Application\User\UserService;
-use Up\Application\User\UserValidator;
+use Up\Application\Domain\Application\ApplicationService;
+use Up\Application\Domain\Application\ApplicationValidator;
+use Up\Application\Domain\User\UserService;
+use Up\Application\Domain\User\UserValidator;
 use Up\Core\Domain\Application\IApplicationRepository;
 use Up\Core\Domain\Application\IApplicationService;
 use Up\Core\Domain\Application\IApplicationValidator;
@@ -11,7 +11,7 @@ use Up\Core\Domain\LogAction\ILogActionRepository;
 use Up\Core\Domain\User\IUserRepository;
 use Up\Core\Domain\User\IUserService;
 use Up\Core\Domain\User\IUserValidator;
-use Up\Core\Email\IMailService;
+use Up\Core\External\IMailService;
 use Up\Gateway\Email\EmailService;
 use Up\Gateway\Email\IMailer;
 use Up\Gateway\Email\Mailer;

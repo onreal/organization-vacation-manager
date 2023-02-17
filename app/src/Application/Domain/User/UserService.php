@@ -1,13 +1,13 @@
 <?php
 
-namespace Up\Application\User;
+namespace Up\Application\Domain\User;
 
 use Throwable;
+use Up\Application\Models\ResponseModel;
 use Up\Core\Domain\Entities\User;
 use Up\Core\Domain\User\IUserRepository;
 use Up\Core\Domain\User\IUserService;
 use Up\Core\Domain\User\IUserValidator;
-use Up\Core\Model\ResponseModel;
 
 final class UserService implements IUserService
 {

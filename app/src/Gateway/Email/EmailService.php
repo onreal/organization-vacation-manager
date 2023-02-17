@@ -4,7 +4,7 @@ namespace Up\Gateway\Email;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-use Up\Core\Email\IMailService;
+use Up\Core\External\IMailService;
 
 class EmailService implements IMailService
 {

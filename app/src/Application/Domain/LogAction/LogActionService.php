@@ -1,11 +1,11 @@
 <?php
 
-namespace Up\Application\LogAction;
+namespace Up\Application\Domain\LogAction;
 
+use Up\Application\Models\ResponseModel;
 use Up\Core\Domain\LogAction\ILogActionRepository;
 use Up\Core\Domain\LogAction\ILogActionService;
 use Up\Core\Domain\User\IUserRepository;
-use Up\Core\Model\ResponseModel;
 
 final class LogActionService implements ILogActionService
 {

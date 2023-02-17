@@ -2,7 +2,7 @@
 
 namespace Up\Core\Domain\LogAction;
 
-use Up\Core\Model\ResponseModel;
+use Up\Application\Models\ResponseModel;
 
 interface ILogActionService
 {

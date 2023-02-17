@@ -2,7 +2,7 @@
 
 namespace Up\Core\Domain\Application;
 
-use Up\Core\Model\ResponseModel;
+use Up\Application\Models\ResponseModel;
 
 interface IApplicationService
 {

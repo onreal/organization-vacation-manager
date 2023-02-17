@@ -1,11 +1,11 @@
 <?php
 
-namespace Up\Application\Application;
+namespace Up\Application\Domain\Application;
 
 use ReflectionException;
+use Up\Core\Domain\Application\StatusEnum;
 use Up\Core\Domain\Application\IApplicationRepository;
 use Up\Core\Domain\Application\IApplicationValidator;
-use Up\Core\Enum\ApplicationStatus;
 
 final class ApplicationValidator implements IApplicationValidator
 {
@@ -90,6 +90,6 @@ final class ApplicationValidator implements IApplicationValidator
      */
     public function isStatusValid(string $status): bool
     {
-        return ApplicationStatus::isValidValue($status);
+        return StatusEnum::isValidValue($status);
     }
 }

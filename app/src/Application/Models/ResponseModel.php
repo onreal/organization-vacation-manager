@@ -1,8 +1,10 @@
 <?php
 
-namespace Up\Core\Model;
+namespace Up\Application\Models;
 
-class ResponseModel
+use Up\Core\Models\IApiResponse;
+
+class ResponseModel implements IApiResponse
 {
     private int $code;
     private string $message;

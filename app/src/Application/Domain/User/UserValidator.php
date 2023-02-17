@@ -1,10 +1,10 @@
 <?php
 
-namespace Up\Application\User;
+namespace Up\Application\Domain\User;
 
 use ReflectionException;
 use Up\Core\Domain\User\IUserValidator;
-use Up\Core\Enum\Role;
+use Up\Core\Domain\User\RoleEnum;
 
 final class UserValidator implements IUserValidator
 {
@@ -85,6 +85,6 @@ final class UserValidator implements IUserValidator
      */
     public function roleIsValid($role): bool
     {
-        return Role::isValidValue($role);
+        return RoleEnum::isValidValue($role);
     }
 }

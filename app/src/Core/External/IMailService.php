@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Core\Email;
+namespace Up\Core\External;
 
 interface IMailService
 {

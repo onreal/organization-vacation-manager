@@ -1,8 +1,10 @@
 <?php
 
-namespace Up\Core\Enum;
+namespace Up\Core\Domain\Application;
 
-abstract class ApplicationStatus extends EnumBase
+use Up\Core\Handlers\EnumHandler;
+
+abstract class StatusEnum extends EnumHandler
 {
     public const PENDING = 'pending';
     public const ACCEPTED = 'accepted';

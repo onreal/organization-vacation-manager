@@ -1,19 +1,19 @@
 <?php
 
-namespace Up\Application\Application;
+namespace Up\Application\Domain\Application;
 
 use DateTime;
 use Throwable;
-use Up\Application\Email\MailTemplate;
+use Up\Application\Models\ResponseModel;
+use Up\Application\Templates\MailTemplate;
 use Up\Core\Domain\Application\IApplicationRepository;
 use Up\Core\Domain\Application\IApplicationService;
 use Up\Core\Domain\Application\IApplicationValidator;
 use Up\Core\Domain\Entities\Application;
 use Up\Core\Domain\LogAction\ILogActionRepository;
 use Up\Core\Domain\User\IUserRepository;
-use Up\Core\Email\IMailService;
-use Up\Core\Enum\Role;
-use Up\Core\Model\ResponseModel;
+use Up\Core\Domain\User\RoleEnum;
+use Up\Core\External\IMailService;
 
 final class ApplicationService implements IApplicationService
 {
@@ -102,7 +102,7 @@ final class ApplicationService implements IApplicationService
             $newApplication->setUser($user);
             $applicationId = $this->applicationRepository->add($newApplication);
 
-            $admins = $this->userRepository->findByAll('role', Role::ADMIN);
+            $admins = $this->userRepository->findByAll('role', RoleEnum::ADMIN);
             if (!empty($admins)) {
                 $subject  = 'New vacation entry submitted';
                 $template = MailTemplate::adminTemplate(

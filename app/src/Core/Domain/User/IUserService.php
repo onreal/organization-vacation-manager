@@ -2,7 +2,7 @@
 
 namespace Up\Core\Domain\User;
 
-use Up\Core\Model\ResponseModel;
+use Up\Application\Models\ResponseModel;
 
 interface IUserService
 {
