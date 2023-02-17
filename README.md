@@ -11,7 +11,7 @@ is notified with email about the manager decision.
     * `schema` _MySQL Schema_
     * `src` _API Source code_
 * `web` _Vue 3 Development source_
-  * `src` _Vue source code_
+    * `src` _Vue source code_
 * `public`  _Public root directory (e.g. www.domain.com/)_
     * `/`   _Vue build files_
     * `api` _Initialize PHP API_
