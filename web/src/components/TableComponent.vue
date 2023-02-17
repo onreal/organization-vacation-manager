@@ -8,10 +8,10 @@
         {{head.title}}</div>
     </div>
     <div v-for="(item, index) in data" :key="index" class="flex-table row" @click="colNavigation(item)" role="rowgroup">
-      <div class="flex-row first" role="cell"><span class="flag-icon flag-icon-gb"></span>{{ colValue(0, item) }}</div>
-      <div class="flex-row" role="cell">{{ colValue(1, item) }}</div>
-      <div class="flex-row" role="cell">{{ colValue(2, item) }}</div>
-      <div class="flex-row" role="cell">{{ colValue(3, item) }}</div>
+      <div v-for="(col, num) in configure" :key="num" :class="num === 0 ? 'flex-row first' : 'flex-row'" role="cell">
+        <span v-if="num === 0" class="flag-icon flag-icon-gb"></span>
+        {{ colValue(num, item) }}
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +29,20 @@ export default {
      * @Array configure
      */
     configure: Array,
+    /**
+     * Feed table with data, data object properties should mach configuration properties
+     * [{}]
+     * @Array configure
+     */
     data: Array,
+    /**
+     * Column navigation settings
+     * {
+     *    path: '/user/:userId:', ## parameters should enclosed with :
+     *    params: []
+     * }
+     * @Array configure
+     */
     navigator: Object
   },
   methods: {
