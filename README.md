@@ -6,8 +6,8 @@ Employees create applications for vacation leave,
 Managers are notified with email and click accept or reject from the email body. Employee 
 is notified with email about the manager decision.
 
-## Repo Directories
-* `app` _PHP 7.4 APP_
+## Repo structure
+* `app` _PHP 7.4 Backend_
     * `schema` _MySQL Schema_
     * `src` _API Source code_
 * `web` _Vue 3 Development source_
@@ -16,7 +16,7 @@ is notified with email about the manager decision.
     * `/`   _Vue build files_
     * `api` _Initialize PHP API_
 
-## API Layers
+## [Backend structure](https://github.com/onreal/vacation-manager/tree/main/app)
 * `Core` (Core Layer)
 * `Application` (Business Layer)
 * `Infrastructure` (DI Layer)
@@ -30,6 +30,7 @@ is notified with email about the manager decision.
 * For Vue 3 front end development [check this readme.txt](https://github.com/onreal/vacation-manager/tree/main/web)
 * [Vite Configuration](https://github.com/onreal/vacation-manager/blob/main/web/vite.config.js)  for web app builds directly into the public directory 
 * Make sure your webserver is configured to serve files from `public` directory
+* I use [nanoninja docker composer](https://github.com/nanoninja/docker-nginx-php-mysql) for my development needs
 
 ## Installation
 * Clone repository 
@@ -59,6 +60,7 @@ There are two default users with the provided MySQL schema.
 
 ## TODO (Order matters)
 * Add migration script
+* Add tests (Codeception)
 * Add API Documentation (Swagger)
 * Add JWT authentication 
 * Log Actions on application status change
