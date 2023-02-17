@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Persistence;
+namespace Up\Gateway\Persistence;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;

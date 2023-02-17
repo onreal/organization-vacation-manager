@@ -34,13 +34,10 @@ class MailTemplate
         string $status,
         string $createdDatetime
     ):string {
-//        $body = "Dear employee, your supervisor has %s your application submitted on %s.";
-//        return sprintf(
-//            $body,
-//            $status,
-//            $createdDatetime
-//        );
-        $body = "Dear employee, your supervisor has $status your application submitted on $createdDatetime.";
-        return $body;
+        return sprintf(
+            'Dear employee, your supervisor has %s your application submitted on %s.',
+            $status,
+            $createdDatetime
+        );
     }
 }

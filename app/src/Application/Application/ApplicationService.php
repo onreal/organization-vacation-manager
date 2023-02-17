@@ -17,6 +17,7 @@ use Up\Core\Model\ResponseModel;
 
 final class ApplicationService implements IApplicationService
 {
+
     /**
      * @var IApplicationRepository
      */
@@ -42,35 +43,38 @@ final class ApplicationService implements IApplicationService
      */
     private IMailService $mailService;
 
+
     /**
      * @param IApplicationRepository $applicationRepository
-     * @param IApplicationValidator $applicationValidator
-     * @param IUserRepository $userRepository
-     * @param IMailService $mailService
-     * @param ILogActionRepository $logActionRepository
+     * @param IApplicationValidator  $applicationValidator
+     * @param IUserRepository        $userRepository
+     * @param IMailService           $mailService
+     * @param ILogActionRepository   $logActionRepository
      */
     public function __construct(
         IApplicationRepository $applicationRepository,
-        IApplicationValidator  $applicationValidator,
-        IUserRepository        $userRepository,
-        IMailService           $mailService,
-        ILogActionRepository   $logActionRepository
+        IApplicationValidator $applicationValidator,
+        IUserRepository $userRepository,
+        IMailService $mailService,
+        ILogActionRepository $logActionRepository
     ) {
         $this->applicationRepository = $applicationRepository;
-        $this->applicationValidator = $applicationValidator;
-        $this->userRepository = $userRepository;
-        $this->mailService = $mailService;
-        $this->logActionRepository = $logActionRepository;
-    }
+        $this->applicationValidator  = $applicationValidator;
+        $this->userRepository        = $userRepository;
+        $this->mailService           = $mailService;
+        $this->logActionRepository   = $logActionRepository;
+
+    }//end __construct()
+
 
     /**
-     * @param string $payload
+     * @param  string $payload
      * @return ResponseModel
      */
     public function add(string $payload): ResponseModel
     {
         try {
-            $errors = [];
+            $errors      = [];
             $application = $this->validate($errors, $payload);
             if (!empty($errors)) {
                 $code = array_keys($errors)[0];
@@ -87,7 +91,7 @@ final class ApplicationService implements IApplicationService
             }
 
             $fromDate = new DateTime($application->fromDate);
-            $toDate = new DateTime($application->toDate);
+            $toDate   = new DateTime($application->toDate);
 
             $newApplication = new Application();
             $newApplication->setUserId($user->getUserId());
@@ -100,10 +104,10 @@ final class ApplicationService implements IApplicationService
 
             $admins = $this->userRepository->findByAll('role', Role::ADMIN);
             if (!empty($admins)) {
-                $subject = 'New vacation entry submitted';
+                $subject  = 'New vacation entry submitted';
                 $template = MailTemplate::adminTemplate(
                     $applicationId,
-                    $user->getFirstName() . ' ' . $user->getLastName(),
+                    $user->getFirstName().' '.$user->getLastName(),
                     $application->fromDate,
                     $application->toDate,
                     $application->reason
@@ -120,11 +124,13 @@ final class ApplicationService implements IApplicationService
             return new ResponseModel(201, 'OK', $this->applicationRepository->find($applicationId));
         } catch (Throwable $e) {
             return new ResponseModel(500, $e->getMessage());
-        }
-    }
+        }//end try
+
+    }//end add()
+
 
     /**
-     * @param int $applicationId
+     * @param  integer $applicationId
      * @return ResponseModel
      */
     public function find(int $applicationId): ResponseModel
@@ -139,10 +145,12 @@ final class ApplicationService implements IApplicationService
         } catch (Throwable $e) {
             return new ResponseModel(500, $e->getMessage());
         }
-    }
+
+    }//end find()
+
 
     /**
-     * @param int $userId
+     * @param  integer $userId
      * @return ResponseModel
      */
     public function findByUserId(int $userId): ResponseModel
@@ -157,7 +165,9 @@ final class ApplicationService implements IApplicationService
         } catch (Throwable $e) {
             return new ResponseModel(500, $e->getMessage());
         }
-    }
+
+    }//end findByUserId()
+
 
     /**
      * @return ResponseModel
@@ -169,11 +179,13 @@ final class ApplicationService implements IApplicationService
         } catch (Throwable $e) {
             return new ResponseModel(500, $e->getMessage());
         }
-    }
+
+    }//end fetchAll()
+
 
     /**
-     * @param int $applicationId
-     * @param string $payload
+     * @param  integer $applicationId
+     * @param  string  $payload
      * @return ResponseModel
      */
     public function update(int $applicationId, string $payload): ResponseModel
@@ -184,7 +196,7 @@ final class ApplicationService implements IApplicationService
                 return new ResponseModel(404, 'application not found');
             }
 
-            $errors = [];
+            $errors         = [];
             $theApplication = $this->validate($errors, $payload);
             if (!empty($errors)) {
                 $code = array_keys($errors)[0];
@@ -192,13 +204,15 @@ final class ApplicationService implements IApplicationService
             }
 
             $fromDate = new DateTime($theApplication->fromDate);
-            $toDate = new DateTime($theApplication->toDate);
+            $toDate   = new DateTime($theApplication->toDate);
 
-            if ($application->getFromDate() === $fromDate &&
-                $application->getToDate() === $toDate
-                && $application->getReason() === $theApplication->reason) {
+            if ($application->getFromDate() === $fromDate
+                && $application->getToDate() === $toDate
+                && $application->getReason() === $theApplication->reason
+            ) {
                 return new ResponseModel(202, 'no need to update', $application);
             }
+
             $application->setReason($theApplication->reason);
             $application->setFromDate($fromDate);
             $application->setToDate($toDate);
@@ -207,12 +221,14 @@ final class ApplicationService implements IApplicationService
             return new ResponseModel(200, 'OK', $this->applicationRepository->find($applicationId));
         } catch (Throwable $e) {
             return new ResponseModel(500, $e->getMessage());
-        }
-    }
+        }//end try
+
+    }//end update()
+
 
     /**
-     * @param int $applicationId
-     * @param string $status
+     * @param  integer $applicationId
+     * @param  string  $status
      * @return ResponseModel
      */
     public function updateStatus(int $applicationId, string $status): ResponseModel
@@ -223,32 +239,38 @@ final class ApplicationService implements IApplicationService
                 return new ResponseModel(404, 'could not validate incoming status');
             }
 
+            if (!$this->applicationValidator->isStatusValid($applicationStatus->status)) {
+                return new ResponseModel(400, 'status is not valid');
+            }
+
             $application = $this->applicationRepository->find($applicationId);
             if (!$application) {
                 return new ResponseModel(404, 'application could not found');
             }
 
+            // TODO let admin change the status of the application is current application status is not Pending?
             $user = $this->userRepository->findByOne('userId', $application->getUserId());
             if (!$user) {
                 return new ResponseModel(400, 'user is not valid');
             }
 
-            if (!$this->applicationValidator->isStatusValid($applicationStatus->status)) {
-                return new ResponseModel(400, 'status is not valid');
+            if ($application->getStatus() === $applicationStatus->status) {
+                return new ResponseModel(202, 'no need to update', $application);
             }
 
             if ($application->getStatus() === $applicationStatus->status) {
                 return new ResponseModel(202, 'no need to update', $application);
             }
+
             $application->setStatus($applicationStatus->status);
             $this->applicationRepository->update($application);
 
             $datetime = $application->getCreatedDatetime()->format('Y/m/d');
-//            $mailBody = MailTemplate::employeeTemplate(
-//                $application->getStatus(),
-//                $datetime
-//            );
-            $body = "Dear employee, your supervisor has " . $application->getStatus() . " your application submitted on $datetime.";
+            $body     = MailTemplate::employeeTemplate(
+                $application->getStatus(),
+                $datetime
+            );
+
             $this->mailService->send(
                 $user->getEmail(),
                 'Your application is updated',
@@ -262,11 +284,13 @@ final class ApplicationService implements IApplicationService
             );
         } catch (Throwable $e) {
             return new ResponseModel(500, $e->getMessage());
-        }
-    }
+        }//end try
+
+    }//end updateStatus()
+
 
     /**
-     * @param int $applicationId
+     * @param  integer $applicationId
      * @return ResponseModel
      */
     public function delete(int $applicationId): ResponseModel
@@ -283,11 +307,13 @@ final class ApplicationService implements IApplicationService
         } catch (Throwable $e) {
             return new ResponseModel(500, $e->getMessage());
         }
-    }
+
+    }//end delete()
+
 
     /**
-     * @param array $errors
-     * @param string $application
+     * @param  array  $errors
+     * @param  string $application
      * @return object|null
      */
     private function validate(array &$errors, string $application): ?object
@@ -312,7 +338,8 @@ final class ApplicationService implements IApplicationService
             $theApplication->userId,
             $theApplication->fromDate,
             $theApplication->toDate
-        )) {
+        )
+        ) {
             $errors[400] = 'fromDate and toDate must not overlap other application dates';
             return null;
         }
@@ -322,5 +349,8 @@ final class ApplicationService implements IApplicationService
         }
 
         return $theApplication;
-    }
-}
+
+    }//end validate()
+
+
+}//end class

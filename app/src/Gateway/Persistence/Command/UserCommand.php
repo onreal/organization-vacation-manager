@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Persistence\Command;
+namespace Up\Gateway\Persistence\Command;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -8,7 +8,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Up\Core\Domain\Entities\User;
 use Up\Core\Domain\User\IUserRepository;
-use Up\Persistence\IDatabase;
+use Up\Gateway\Persistence\IDatabase;
 
 final class UserCommand implements IUserRepository
 {
@@ -23,6 +23,7 @@ final class UserCommand implements IUserRepository
      */
     private EntityRepository $repository;
 
+
     /**
      * @param IDatabase $connection
      */
@@ -30,22 +31,26 @@ final class UserCommand implements IUserRepository
     {
         $this->connection = $connection->getConnection();
         $this->repository = $connection->getRepository(User::class);
-    }
+
+    }//end __construct()
+
 
     /**
-     * @param User $user
-     * @return int
+     * @param  User $user
+     * @return integer
      */
     public function add(User $user): int
     {
         try {
             $this->connection->persist($user);
             $this->connection->flush();
-        } catch (OptimisticLockException|ORMException $e) {
+        } catch (OptimisticLockException | ORMException $e) {
         }
 
         return $user->getUserId();
-    }
+
+    }//end add()
+
 
     public function findByOne(string $type, $value): ?User
     {
@@ -60,7 +65,9 @@ final class UserCommand implements IUserRepository
         }
 
         return $user;
-    }
+
+    }//end findByOne()
+
 
     public function findByAll(string $type, $value): array
     {
@@ -75,7 +82,9 @@ final class UserCommand implements IUserRepository
         }
 
         return $user;
-    }
+
+    }//end findByAll()
+
 
     /**
      * @return User[]
@@ -89,7 +98,9 @@ final class UserCommand implements IUserRepository
         }
 
         return $users;
-    }
+
+    }//end fetchAll()
+
 
     /**
      * @param User $user
@@ -99,9 +110,11 @@ final class UserCommand implements IUserRepository
         try {
             $this->connection->persist($user);
             $this->connection->flush();
-        } catch (OptimisticLockException|ORMException $e) {
+        } catch (OptimisticLockException | ORMException $e) {
         }
-    }
+
+    }//end update()
+
 
     /**
      * @param User $user
@@ -113,5 +126,8 @@ final class UserCommand implements IUserRepository
             $this->connection->flush();
         } catch (ORMException $e) {
         }
-    }
-}
+
+    }//end delete()
+
+
+}//end class

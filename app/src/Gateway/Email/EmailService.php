@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Service\Mail;
+namespace Up\Gateway\Email;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -14,9 +14,9 @@ class EmailService implements IMailService
     private PHPMailer $mailer;
 
     /**
-     * @param IMail $mailer
+     * @param IMailer $mailer
      */
-    public function __construct(IMail $mailer)
+    public function __construct(IMailer $mailer)
     {
         $this->mailer = $mailer->getMailer();
     }

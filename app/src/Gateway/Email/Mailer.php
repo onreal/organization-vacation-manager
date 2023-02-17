@@ -1,12 +1,12 @@
 <?php
 
-namespace Up\Service\Mail;
+namespace Up\Gateway\Email;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-class MailPHPMailer implements IMail
+class Mailer implements IMailer
 {
 
     /**
@@ -16,9 +16,9 @@ class MailPHPMailer implements IMail
     public function getMailer(): PHPMailer
     {
         $mailer = new PHPMailer();
-        if ($_ENV['IS_SMTP_USED']) {
+        if ($_ENV['IS_SMTP']) {
             $mailer->isSMTP();
-            $mailer->SMTPDebug = SMTP::DEBUG_SERVER;
+            if ($_ENV['IS_SMTP_DEBUG']) $mailer->SMTPDebug = SMTP::DEBUG_SERVER;
             $mailer->Host       = $_ENV['SMTP_HOST'];
             $mailer->FromName   = $_ENV['MAIL_FROM_NAME'];
             $mailer->SMTPAuth   = true;

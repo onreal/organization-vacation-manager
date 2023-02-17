@@ -25,14 +25,8 @@
             "Up\\Api\\": "src/Api",
             "Up\\Core\\": "src/Core",
             "Up\\Infrastructure\\": "src/Infrastructure",
-            "Up\\Persistence\\": "src/Persistence",
-            "Up\\Service\\": "src/Service",
-            "Up\\Application\\": "src/Application"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "AppTest\\Acme\\": "test/"
+            "Up\\Application\\": "src/Application",
+            "Up\\Gateway\\": "src/Gateway"
         }
     },
     "config": {

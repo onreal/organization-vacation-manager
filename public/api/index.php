@@ -15,21 +15,21 @@ use OpenApi\Annotations\Info;
 use OpenApi\Annotations\PathItem;
 use Slim\Routing\RouteContext;
 
-include '../../app/api/vendor/autoload.php';
+include '../../app/vendor/autoload.php';
 
 try {
     // Initialize Dotenv .env
-    $dotenv = Dotenv\Dotenv::createImmutable('../../app/api/');
+    $dotenv = Dotenv\Dotenv::createImmutable('../../app/');
     $dotenv->load();
     // Set dependencies
     $containerBuilder = new ContainerBuilder;
-    $containerBuilder->addDefinitions('../../app/api/src/Infrastructure/dependencies.php');
+    $containerBuilder->addDefinitions('../../app/src/Infrastructure/dependencies.php');
     $container = $containerBuilder->build();
     // Attach dependencies on Slim
     $app = Bridge::create($container);
-    require '../../app/api/src/Api/Routes/user.php';
-    require '../../app/api/src/Api/Routes/application.php';
-    require '../../app/api/src/Api/Routes/logAction.php';
+    require '../../app/src/Api/Routes/user.php';
+    require '../../app/src/Api/Routes/application.php';
+    require '../../app/src/Api/Routes/logAction.php';
     // Add slim CORS
     $app->add(function ($request, $handler) {
         // Set content type

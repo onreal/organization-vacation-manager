@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Persistence\Command;
+namespace Up\Gateway\Persistence\Command;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -10,7 +10,7 @@ use Doctrine\Persistence\Mapping\MappingException;
 use Up\Core\Domain\Application\IApplicationRepository;
 use Up\Core\Domain\Entities\Application;
 use Up\Core\Domain\Entities\User;
-use Up\Persistence\IDatabase;
+use Up\Gateway\Persistence\IDatabase;
 
 final class ApplicationCommand implements IApplicationRepository
 {
@@ -25,6 +25,7 @@ final class ApplicationCommand implements IApplicationRepository
      */
     private EntityRepository $repository;
 
+
     /**
      * @param IDatabase $connection
      */
@@ -32,11 +33,13 @@ final class ApplicationCommand implements IApplicationRepository
     {
         $this->connection = $connection->getConnection();
         $this->repository = $connection->getRepository(Application::class);
-    }
+
+    }//end __construct()
+
 
     /**
-     * @param Application $application
-     * @return int
+     * @param  Application $application
+     * @return integer
      */
     public function add(Application $application): int
     {
@@ -44,14 +47,16 @@ final class ApplicationCommand implements IApplicationRepository
             $this->connection->clear();
             $application = $this->connection->merge($application);
             $this->connection->flush();
-        } catch (OptimisticLockException|ORMException|MappingException $e) {
+        } catch (OptimisticLockException | ORMException | MappingException $e) {
         }
 
         return $application->getApplicationId();
-    }
+
+    }//end add()
+
 
     /**
-     * @param int $applicationId
+     * @param  integer $applicationId
      * @return Application|null
      */
     public function find(int $applicationId): ?Application
@@ -63,10 +68,12 @@ final class ApplicationCommand implements IApplicationRepository
         }
 
         return $application;
-    }
+
+    }//end find()
+
 
     /**
-     * @param int $userId
+     * @param  integer $userId
      * @return Application[]
      */
     public function findByUserId(int $userId): array
@@ -75,7 +82,9 @@ final class ApplicationCommand implements IApplicationRepository
             ['userId' => $userId],
             ['applicationId' => 'DESC']
         );
-    }
+
+    }//end findByUserId()
+
 
     /**
      * @return array|Application
@@ -83,7 +92,9 @@ final class ApplicationCommand implements IApplicationRepository
     public function fetchAllActive(): array
     {
         return $this->repository->findBy([], ['applicationId' => 'DESC']);
-    }
+
+    }//end fetchAllActive()
+
 
     /**
      * @param Application $application
@@ -93,9 +104,11 @@ final class ApplicationCommand implements IApplicationRepository
         try {
             $this->connection->persist($application);
             $this->connection->flush();
-        } catch (OptimisticLockException|ORMException $e) {
+        } catch (OptimisticLockException | ORMException $e) {
         }
-    }
+
+    }//end update()
+
 
     /**
      * @param Application $application
@@ -106,25 +119,21 @@ final class ApplicationCommand implements IApplicationRepository
             $this->connection->remove($application);
         } catch (ORMException $e) {
         }
-    }
+
+    }//end delete()
+
 
     /**
-     * @param int $userId
-     * @param string $fromDate
-     * @param string $toDate
+     * @param  integer $userId
+     * @param  string  $fromDate
+     * @param  string  $toDate
      * @return array
      */
     public function fetchAllBetweenDates(int $userId, string $fromDate, string $toDate): array
     {
-        return $this->connection->createQueryBuilder()
-            ->select('e')
-            ->from(Application::class, 'e')
-            ->where('e.userId = :userId')
-            ->andWhere(':from BETWEEN e.fromDate AND e.toDate')
-            ->orWhere(':to BETWEEN e.fromDate AND e.toDate')
-            ->setParameter('from', date('Y-m-d', strtotime($fromDate)))
-            ->setParameter('to', date('Y-m-d', strtotime($toDate)))
-            ->setParameter('userId', $userId)
-            ->getQuery()->getResult();
-    }
-}
+        return $this->connection->createQueryBuilder()->select('e')->from(Application::class, 'e')->where('e.userId = :userId')->andWhere(':from BETWEEN e.fromDate AND e.toDate')->orWhere(':to BETWEEN e.fromDate AND e.toDate')->setParameter('from', date('Y-m-d', strtotime($fromDate)))->setParameter('to', date('Y-m-d', strtotime($toDate)))->setParameter('userId', $userId)->getQuery()->getResult();
+
+    }//end fetchAllBetweenDates()
+
+
+}//end class

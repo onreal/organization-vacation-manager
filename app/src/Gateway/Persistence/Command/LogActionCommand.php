@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Persistence\Command;
+namespace Up\Gateway\Persistence\Command;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -8,10 +8,11 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Up\Core\Domain\Entities\LogAction;
 use Up\Core\Domain\LogAction\ILogActionRepository;
-use Up\Persistence\IDatabase;
+use Up\Gateway\Persistence\IDatabase;
 
 final class LogActionCommand implements ILogActionRepository
 {
+
     /**
      * @var EntityManager
      */
@@ -22,6 +23,7 @@ final class LogActionCommand implements ILogActionRepository
      */
     private EntityRepository $repository;
 
+
     /**
      * @param IDatabase $connection
      */
@@ -29,25 +31,29 @@ final class LogActionCommand implements ILogActionRepository
     {
         $this->connection = $connection->getConnection();
         $this->repository = $connection->getRepository(LogAction::class);
-    }
+
+    }//end __construct()
+
 
     /**
-     * @param LogAction $logAction
-     * @return int
+     * @param  LogAction $logAction
+     * @return integer
      */
     public function add(LogAction $logAction): int
     {
         try {
             $this->connection->persist($logAction);
             $this->connection->flush();
-        } catch (OptimisticLockException|ORMException $e) {
+        } catch (OptimisticLockException | ORMException $e) {
         }
 
         return $logAction->getLogActionId();
-    }
+
+    }//end add()
+
 
     /**
-     * @param int $userId
+     * @param  integer $userId
      * @return LogAction[]
      */
     public function findByUserId(int $userId): array
@@ -62,5 +68,8 @@ final class LogActionCommand implements ILogActionRepository
         }
 
         return $logActions;
-    }
-}
+
+    }//end findByUserId()
+
+
+}//end class

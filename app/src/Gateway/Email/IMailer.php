@@ -1,12 +1,11 @@
 <?php
 
-namespace Up\Service\Mail;
+namespace Up\Gateway\Email;
 
-interface IMail
+interface IMailer
 {
     /**
      * @return mixed
-     * @author Margarit Koka
      */
     public function getMailer();
 }

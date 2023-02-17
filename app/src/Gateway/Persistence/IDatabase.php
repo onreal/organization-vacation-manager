@@ -1,6 +1,6 @@
 <?php
 
-namespace Up\Persistence;
+namespace Up\Gateway\Persistence;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
