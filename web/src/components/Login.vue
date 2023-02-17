@@ -2,9 +2,6 @@
   <div class="container">
     <form @submit.prevent="login">
       <h2 class="mb-3">Login</h2>
-<!--      <div class="error" v-for="(error, index) in errors" :key="index">-->
-<!--        <strong>Error:</strong> {{error}}-->
-<!--      </div>-->
       <div class="input">
         <label for="email">Email address</label>
         <input
